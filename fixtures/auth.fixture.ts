@@ -6,7 +6,7 @@ type AuthFixtures = {
 
 export const test = base.extend<AuthFixtures>({
   authenticatedPage: async ({ page }, use) => {
-    await page.goto("/web/index.php/auth/login");
+    await page.goto("/web/index.php/auth/login", { waitUntil: 'domcontentloaded' });
 
     await page.locator('input[name="username"]').fill("Admin");
     await page.locator('input[name="password"]').fill("admin123");

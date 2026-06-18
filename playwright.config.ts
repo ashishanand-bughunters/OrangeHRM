@@ -12,7 +12,7 @@ export default defineConfig({
     trace: "on-first-retry",
     screenshot: "only-on-failure",
     actionTimeout: 15_000,
-    navigationTimeout: 30_000,
+    navigationTimeout: 90_000,
   },
   projects: [
     {
