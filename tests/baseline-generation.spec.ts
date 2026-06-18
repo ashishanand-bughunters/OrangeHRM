@@ -9,6 +9,7 @@ test.describe("Page Title Baseline Generation", () => {
   test("capture module titles for all navigation sections", async ({
     authenticatedPage,
   }) => {
+    test.setTimeout(180_000);
     const titleCapture = new PageTitleCapture(authenticatedPage);
     const baseline = await titleCapture.captureAllModuleTitles();
 

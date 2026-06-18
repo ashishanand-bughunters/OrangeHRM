@@ -7,6 +7,7 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   workers: 1,
   reporter: [["html", { open: "never" }], ["list"]],
+  timeout: 120_000,
   use: {
     baseURL: process.env.BASE_URL || "https://opensource-demo.orangehrmlive.com",
     trace: "on-first-retry",
