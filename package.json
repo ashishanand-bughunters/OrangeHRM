@@ -1,0 +1,12 @@
+{
+  "name": "orangehrm-e2e-tests",
+  "version": "1.0.0",
+  "description": "E2E tests for OrangeHRM",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:timesheet": "npx playwright test timesheetDuplication"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0"
+  }
+}
