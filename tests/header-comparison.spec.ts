@@ -42,6 +42,20 @@ test.describe("Header Baseline Comparison", () => {
     for (const [pageName, pagePath] of Object.entries(PAGES)) {
       await authenticatedPage.goto(pagePath, { waitUntil: "domcontentloaded" });
 
+      // Handle Admin Locker re-validation: sensitive pages (e.g. Maintenance)
+      // redirect to /maintenance/adminLocker and require re-entering admin password.
+      if (authenticatedPage.url().includes("adminLocker")) {
+        await authenticatedPage
+          .locator('input[type="password"]')
+          .fill("admin123");
+        await authenticatedPage
+          .getByRole("button", { name: "Confirm" })
+          .click();
+        await authenticatedPage.waitForURL(`**${pagePath}**`, {
+          timeout: 15_000,
+        });
+      }
+
       const moduleLocator = authenticatedPage.locator(
         ".oxd-topbar-header-breadcrumb-module"
       );
