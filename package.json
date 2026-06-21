@@ -1,10 +1,11 @@
 {
   "name": "orangehrm-e2e-tests",
   "version": "1.0.0",
-  "description": "E2E tests for OrangeHRM",
+  "description": "E2E tests for OrangeHRM page title validation",
   "scripts": {
     "test": "npx playwright test",
-    "test:timesheet": "npx playwright test timesheetDuplication"
+    "test:baseline": "npx playwright test baseline-generation",
+    "test:validate": "npx playwright test title-validation"
   },
   "devDependencies": {
     "@playwright/test": "^1.49.0"
