@@ -42,18 +42,22 @@ test.describe("Header Baseline Comparison", () => {
     for (const [pageName, pagePath] of Object.entries(PAGES)) {
       await authenticatedPage.goto(pagePath, { waitUntil: "domcontentloaded" });
 
-      // Handle Admin Locker re-validation: sensitive pages (e.g. Maintenance)
-      // redirect to /maintenance/adminLocker and require re-entering admin password.
-      if (authenticatedPage.url().includes("adminLocker")) {
+      // Handle Administrator Access re-validation overlay: on sensitive pages
+      // (e.g. Maintenance) an overlay appears without redirecting the URL.
+      // Detect by heading text, fill admin password, confirm, then wait for it to close.
+      const adminLockHeading = authenticatedPage.getByText(
+        "Administrator Access",
+        { exact: false }
+      );
+      const isLocked = await adminLockHeading.isVisible().catch(() => false);
+      if (isLocked) {
         await authenticatedPage
           .locator('input[type="password"]')
           .fill("admin123");
         await authenticatedPage
           .getByRole("button", { name: "Confirm" })
           .click();
-        await authenticatedPage.waitForURL(`**${pagePath}**`, {
-          timeout: 15_000,
-        });
+        await adminLockHeading.waitFor({ state: "hidden", timeout: 10_000 });
       }
 
       const moduleLocator = authenticatedPage.locator(
