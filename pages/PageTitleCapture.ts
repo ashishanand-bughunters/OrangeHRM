@@ -30,8 +30,8 @@ export class PageTitleCapture {
 
   /** Navigate to a module via its direct URL path */
   async navigateToModule(path: string): Promise<void> {
-    await this.page.goto(path, { waitUntil: 'domcontentloaded' });
-    await this.moduleTitle.waitFor({ state: "visible", timeout: 15_000 });
+    await this.page.goto(path, { waitUntil: 'load' });
+    await this.moduleTitle.waitFor({ state: "visible", timeout: 30_000 });
   }
 
   /** Get the module title text from the top breadcrumb */
