@@ -43,12 +43,19 @@ test.describe("Header Baseline Comparison", () => {
       await authenticatedPage.goto(pagePath, { waitUntil: "domcontentloaded" });
 
       // Handle Administrator Access re-validation overlay: on sensitive pages
-      // (e.g. Maintenance) an overlay appears without redirecting the URL.
-      // Detect by heading text, fill admin password, confirm, then wait for it to close.
-      const adminLockHeading = authenticatedPage.getByText(
-        "Administrator Access",
-        { exact: false }
+      // (e.g. Maintenance) an overlay appears after the Vue SPA renders — after
+      // domcontentloaded but before the breadcrumb is painted. Wait for EITHER
+      // the breadcrumb OR the overlay to become visible before deciding which path to take.
+      const breadcrumbLocator = authenticatedPage.locator(
+        ".oxd-topbar-header-breadcrumb-module"
       );
+      const adminLockHeading = authenticatedPage.getByRole("heading", {
+        name: "Administrator Access",
+      });
+      await Promise.race([
+        breadcrumbLocator.waitFor({ state: "visible", timeout: 20_000 }),
+        adminLockHeading.waitFor({ state: "visible", timeout: 20_000 }),
+      ]).catch(() => {});
       const isLocked = await adminLockHeading.isVisible().catch(() => false);
       if (isLocked) {
         await authenticatedPage
@@ -60,12 +67,9 @@ test.describe("Header Baseline Comparison", () => {
         await adminLockHeading.waitFor({ state: "hidden", timeout: 10_000 });
       }
 
-      const moduleLocator = authenticatedPage.locator(
-        ".oxd-topbar-header-breadcrumb-module"
-      );
-      await moduleLocator.waitFor({ state: "visible", timeout: 15_000 });
+      await breadcrumbLocator.waitFor({ state: "visible", timeout: 15_000 });
 
-      const moduleText = ((await moduleLocator.textContent()) ?? "").trim();
+      const moduleText = ((await breadcrumbLocator.textContent()) ?? "").trim();
 
       const crumbLocator = authenticatedPage.locator(
         ".oxd-topbar-header-breadcrumb-level"
