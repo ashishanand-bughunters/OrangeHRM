@@ -21,7 +21,8 @@ export class AddCandidatePage {
   readonly successToast: Locator;
   readonly errorToast: Locator;
   readonly validationErrors: Locator;
-  readonly vacancySelect: Locator;
+  readonly vacancyDropdown: Locator;
+  readonly vacancyOptions: Locator;
 
   constructor(private readonly page: Page) {
     this.firstNameInput = page.getByPlaceholder("First Name");
@@ -35,7 +36,8 @@ export class AddCandidatePage {
     this.successToast = page.locator(".oxd-toast--success");
     this.errorToast = page.locator(".oxd-toast--error");
     this.validationErrors = page.locator(".oxd-input-field-error-message");
-    this.vacancySelect = page.locator(".oxd-form-row").filter({ hasText: "Vacancy" }).locator(".oxd-select-wrapper");
+    this.vacancyDropdown = page.locator(".oxd-form-row").filter({ hasText: "Vacancy" }).locator(".oxd-select-wrapper");
+    this.vacancyOptions = page.locator(".oxd-select-dropdown .oxd-select-option");
   }
 
   async fillCandidateForm(data: CandidateFormData): Promise<void> {
@@ -67,5 +69,14 @@ export class AddCandidatePage {
 
   async cancel(): Promise<void> {
     await this.cancelButton.click();
+  }
+
+  async selectFirstVacancy(): Promise<void> {
+    await this.vacancyDropdown.click();
+    await this.vacancyOptions.first().click();
+  }
+
+  get emailError(): Locator {
+    return this.page.locator(".oxd-form-row").filter({ hasText: "Email" }).locator(".oxd-input-field-error-message");
   }
 }
