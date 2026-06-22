@@ -3,12 +3,12 @@
 	"pim": "PIM",
 	"leave": "Leave",
 	"time": "Time / Timesheets",
-	"recruitment": "Recruitment / Candidates",
+	"recruitment": "Recruitment",
 	"myInfo": "PIM",
-	"performance": "Performance",
+	"performance": "Performance / Manage Reviews",
 	"dashboard": "Dashboard",
 	"directory": "Directory",
-	"maintenance": "Maintenance",
+	"maintenance": "Maintenance / Purge Records",
 	"claim": "Claim",
 	"buzz": "Buzz"
 }

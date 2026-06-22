@@ -61,3 +61,46 @@ test.describe("Recruitment - Add Candidate", () => {
     await expect(addCandidatePage.validationErrors.first()).toContainText("Required");
   });
 });
+
+test.describe("Recruitment - Duplicate Candidate Validation", () => {
+  test("should prevent adding the same candidate twice for the same vacancy", async ({ authenticatedPage }) => {
+    const recruitmentPage = new RecruitmentPage(authenticatedPage);
+    const addCandidatePage = new AddCandidatePage(authenticatedPage);
+
+    const uniqueId = Date.now();
+    const firstName = `DupFirst${uniqueId}`;
+    const lastName = `DupLast${uniqueId}`;
+    const email = `dup${uniqueId}@example.com`;
+
+    // First submission: navigate to recruitment, add candidate with vacancy
+    await recruitmentPage.navigate();
+    await recruitmentPage.clickAdd();
+
+    await addCandidatePage.fillCandidateForm({ firstName, lastName, email });
+
+    // Select the first available vacancy from the dropdown
+    await addCandidatePage.vacancySelect.click();
+    const firstOption = authenticatedPage
+      .locator(".oxd-select-dropdown .oxd-select-option")
+      .first();
+    await firstOption.waitFor({ state: "visible" });
+    const vacancyName = await firstOption.textContent();
+    await firstOption.click();
+
+    await addCandidatePage.save();
+    await expect(addCandidatePage.successToast).toBeVisible();
+
+    // Second submission: same email and same vacancy
+    await recruitmentPage.navigate();
+    await recruitmentPage.clickAdd();
+
+    await addCandidatePage.fillCandidateForm({ firstName, lastName, email });
+    await addCandidatePage.selectVacancy(vacancyName!.trim());
+
+    await addCandidatePage.save();
+
+    // Duplicate should be rejected with error toast
+    await expect(addCandidatePage.errorToast).toBeVisible();
+    await expect(addCandidatePage.successToast).not.toBeVisible();
+  });
+});

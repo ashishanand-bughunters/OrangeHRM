@@ -30,8 +30,8 @@ export class PageTitleCapture {
 
   /** Navigate to a module via its direct URL path */
   async navigateToModule(path: string): Promise<void> {
-    await this.page.goto(path, { waitUntil: 'domcontentloaded' });
-    await this.moduleTitle.waitFor({ state: "visible", timeout: 15_000 });
+    await this.page.goto(path, { waitUntil: 'load' });
+    await this.moduleTitle.waitFor({ state: "visible", timeout: 30_000 });
   }
 
   /** Get the module title text from the top breadcrumb */
@@ -46,6 +46,13 @@ export class PageTitleCapture {
     if (count === 0) return "";
     const text = await this.breadcrumbLevel.first().textContent();
     return (text ?? "").trim();
+  }
+
+  /** Get the full header: module title + breadcrumb level (if present) */
+  async getFullHeader(): Promise<string> {
+    const module = await this.getModuleTitle();
+    const level = await this.getBreadcrumbLevel();
+    return level ? `${module} / ${level}` : module;
   }
 
   /** Capture titles for all modules and return as a baseline map */
