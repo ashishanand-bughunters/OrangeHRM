@@ -21,7 +21,7 @@ const HEADER_PAGES = [
 let baseline: Record<string, string>;
 
 test.beforeAll(() => {
-  const baselinePath = path.resolve(__dirname, "../files/headerBaseline.json");
+  const baselinePath = path.resolve(__dirname, "../../files/headerBaseline.json");
   if (!fs.existsSync(baselinePath)) {
     throw new Error(`Baseline file not found: ${baselinePath}`);
   }
