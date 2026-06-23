@@ -1,5 +1,6 @@
 import { Page, Locator } from "@playwright/test";
-import { PIM_SELECTORS } from "../../selectors/pim/PimPage.selectors";
+import selectors from "../../selectors/pim.json";
+import { resolve } from "../utils/selectorHelper";
 
 export class PimPage {
   readonly pimLink: Locator;
@@ -15,25 +16,23 @@ export class PimPage {
   readonly tableHeaders: Locator;
 
   constructor(private readonly page: Page) {
-    this.pimLink = page.getByRole(PIM_SELECTORS.pimLink.role, { name: PIM_SELECTORS.pimLink.name });
-    this.addButton = page.getByRole(PIM_SELECTORS.addButton.role, { name: PIM_SELECTORS.addButton.name });
-    this.employeeTableRows = page.locator(PIM_SELECTORS.employeeTableRows);
+    this.pimLink = resolve(page, selectors.pimLink);
+    this.addButton = resolve(page, selectors.addButton);
+    this.employeeTableRows = page.locator(selectors.employeeTableRows);
     this.searchInputEmployeeName = page
-      .locator(PIM_SELECTORS.searchInputEmployeeName.parent)
-      .filter({ hasText: PIM_SELECTORS.searchInputEmployeeName.filterText })
-      .locator(PIM_SELECTORS.searchInputEmployeeName.child)
+      .locator(selectors.searchInputEmployeeName_parent)
+      .filter({ hasText: selectors.searchInputEmployeeName_filterText })
+      .locator(selectors.searchInputEmployeeName_child)
       .first();
-    this.searchButton = page.getByRole(PIM_SELECTORS.searchButton.role, { name: PIM_SELECTORS.searchButton.name });
-    this.resetButton = page.getByRole(PIM_SELECTORS.resetButton.role, { name: PIM_SELECTORS.resetButton.name });
-    this.recordsFoundText = page.locator(PIM_SELECTORS.recordsFoundText);
-    this.noRecordsMessage = page.locator(PIM_SELECTORS.noRecordsMessage.locator, {
-      hasText: PIM_SELECTORS.noRecordsMessage.hasText,
+    this.searchButton = resolve(page, selectors.searchButton);
+    this.resetButton = resolve(page, selectors.resetButton);
+    this.recordsFoundText = page.locator(selectors.recordsFoundText);
+    this.noRecordsMessage = page.locator(selectors.noRecordsMessage, {
+      hasText: selectors.noRecordsMessage_hasText,
     });
-    this.successToast = page.locator(PIM_SELECTORS.successToast);
-    this.deleteConfirmButton = page.getByRole(PIM_SELECTORS.deleteConfirmButton.role, {
-      name: PIM_SELECTORS.deleteConfirmButton.name,
-    });
-    this.tableHeaders = page.locator(PIM_SELECTORS.tableHeaders);
+    this.successToast = page.locator(selectors.successToast);
+    this.deleteConfirmButton = resolve(page, selectors.deleteConfirmButton);
+    this.tableHeaders = page.locator(selectors.tableHeaders);
   }
 
   async navigate(): Promise<void> {
@@ -51,17 +50,17 @@ export class PimPage {
   }
 
   async getEditButtonForRow(row: Locator): Promise<Locator> {
-    return row.locator(PIM_SELECTORS.editIcon).first();
+    return row.locator(selectors.editIcon).first();
   }
 
   async getDeleteButtonForRow(row: Locator): Promise<Locator> {
-    return row.locator(PIM_SELECTORS.deleteIcon).first();
+    return row.locator(selectors.deleteIcon).first();
   }
 
   async searchByEmployeeName(name: string): Promise<void> {
     await this.searchInputEmployeeName.fill(name);
     const autocompleteOption = this.page
-      .locator(PIM_SELECTORS.autocompleteOption)
+      .locator(selectors.autocompleteOption)
       .first();
     await autocompleteOption.waitFor({ state: "visible", timeout: 10_000 });
     await autocompleteOption.click();

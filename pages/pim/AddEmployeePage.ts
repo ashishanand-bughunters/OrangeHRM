@@ -1,5 +1,6 @@
 import { Page, Locator } from "@playwright/test";
-import { ADD_EMPLOYEE_SELECTORS } from "../../selectors/pim/AddEmployeePage.selectors";
+import selectors from "../../selectors/pim.json";
+import { resolve } from "../utils/selectorHelper";
 
 export interface EmployeeFormData {
   firstName: string;
@@ -21,19 +22,19 @@ export class AddEmployeePage {
   readonly createLoginToggle: Locator;
 
   constructor(private readonly page: Page) {
-    this.firstNameInput = page.getByPlaceholder(ADD_EMPLOYEE_SELECTORS.firstNameInput.placeholder);
-    this.middleNameInput = page.getByPlaceholder(ADD_EMPLOYEE_SELECTORS.middleNameInput.placeholder);
-    this.lastNameInput = page.getByPlaceholder(ADD_EMPLOYEE_SELECTORS.lastNameInput.placeholder);
+    this.firstNameInput = resolve(page, selectors.firstNameInput);
+    this.middleNameInput = resolve(page, selectors.middleNameInput);
+    this.lastNameInput = resolve(page, selectors.lastNameInput);
     this.employeeIdInput = page
-      .locator(ADD_EMPLOYEE_SELECTORS.employeeIdInput.parent)
-      .filter({ hasText: ADD_EMPLOYEE_SELECTORS.employeeIdInput.filterText })
-      .locator(ADD_EMPLOYEE_SELECTORS.employeeIdInput.child);
-    this.saveButton = page.getByRole(ADD_EMPLOYEE_SELECTORS.saveButton.role, { name: ADD_EMPLOYEE_SELECTORS.saveButton.name });
-    this.cancelButton = page.getByRole(ADD_EMPLOYEE_SELECTORS.cancelButton.role, { name: ADD_EMPLOYEE_SELECTORS.cancelButton.name });
-    this.successToast = page.locator(ADD_EMPLOYEE_SELECTORS.successToast);
-    this.errorToast = page.locator(ADD_EMPLOYEE_SELECTORS.errorToast);
-    this.validationErrors = page.locator(ADD_EMPLOYEE_SELECTORS.validationErrors);
-    this.createLoginToggle = page.locator(ADD_EMPLOYEE_SELECTORS.createLoginToggle);
+      .locator(selectors.employeeIdInput_parent)
+      .filter({ hasText: selectors.employeeIdInput_filterText })
+      .locator(selectors.employeeIdInput_child);
+    this.saveButton = resolve(page, selectors.saveButton);
+    this.cancelButton = resolve(page, selectors.cancelButton);
+    this.successToast = page.locator(selectors.successToast);
+    this.errorToast = page.locator(selectors.errorToast);
+    this.validationErrors = page.locator(selectors.validationErrors);
+    this.createLoginToggle = page.locator(selectors.createLoginToggle);
   }
 
   async fillEmployeeForm(data: EmployeeFormData): Promise<void> {

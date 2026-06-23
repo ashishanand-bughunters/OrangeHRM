@@ -1,5 +1,6 @@
 import { Page, Locator } from "@playwright/test";
-import { ADD_CANDIDATE_SELECTORS } from "../../selectors/recruitment/AddCandidatePage.selectors";
+import selectors from "../../selectors/recruitment.json";
+import { resolve } from "../utils/selectorHelper";
 
 export interface CandidateFormData {
   firstName: string;
@@ -26,29 +27,29 @@ export class AddCandidatePage {
   readonly vacancyOptions: Locator;
 
   constructor(private readonly page: Page) {
-    this.firstNameInput = page.getByPlaceholder(ADD_CANDIDATE_SELECTORS.firstNameInput.placeholder);
-    this.middleNameInput = page.getByPlaceholder(ADD_CANDIDATE_SELECTORS.middleNameInput.placeholder);
-    this.lastNameInput = page.getByPlaceholder(ADD_CANDIDATE_SELECTORS.lastNameInput.placeholder);
+    this.firstNameInput = resolve(page, selectors.firstNameInput);
+    this.middleNameInput = resolve(page, selectors.middleNameInput);
+    this.lastNameInput = resolve(page, selectors.lastNameInput);
     this.emailInput = page
-      .locator(ADD_CANDIDATE_SELECTORS.emailInput.parent)
-      .filter({ hasText: ADD_CANDIDATE_SELECTORS.emailInput.filterText })
-      .locator(ADD_CANDIDATE_SELECTORS.emailInput.child)
+      .locator(selectors.emailInput_parent)
+      .filter({ hasText: selectors.emailInput_filterText })
+      .locator(selectors.emailInput_child)
       .first();
     this.contactNumberInput = page
-      .locator(ADD_CANDIDATE_SELECTORS.contactNumberInput.parent)
-      .filter({ hasText: ADD_CANDIDATE_SELECTORS.contactNumberInput.filterText })
-      .locator(ADD_CANDIDATE_SELECTORS.contactNumberInput.child);
-    this.notesInput = page.locator(ADD_CANDIDATE_SELECTORS.notesInput);
-    this.saveButton = page.getByRole(ADD_CANDIDATE_SELECTORS.saveButton.role, { name: ADD_CANDIDATE_SELECTORS.saveButton.name });
-    this.cancelButton = page.getByRole(ADD_CANDIDATE_SELECTORS.cancelButton.role, { name: ADD_CANDIDATE_SELECTORS.cancelButton.name });
-    this.successToast = page.locator(ADD_CANDIDATE_SELECTORS.successToast);
-    this.errorToast = page.locator(ADD_CANDIDATE_SELECTORS.errorToast);
-    this.validationErrors = page.locator(ADD_CANDIDATE_SELECTORS.validationErrors);
+      .locator(selectors.contactNumberInput_parent)
+      .filter({ hasText: selectors.contactNumberInput_filterText })
+      .locator(selectors.contactNumberInput_child);
+    this.notesInput = page.locator(selectors.notesInput);
+    this.saveButton = resolve(page, selectors.saveButton);
+    this.cancelButton = resolve(page, selectors.cancelButton);
+    this.successToast = page.locator(selectors.successToast);
+    this.errorToast = page.locator(selectors.errorToast);
+    this.validationErrors = page.locator(selectors.validationErrors);
     this.vacancyDropdown = page
-      .locator(ADD_CANDIDATE_SELECTORS.vacancyDropdown.parent)
-      .filter({ hasText: ADD_CANDIDATE_SELECTORS.vacancyDropdown.filterText })
-      .locator(ADD_CANDIDATE_SELECTORS.vacancyDropdown.child);
-    this.vacancyOptions = page.locator(ADD_CANDIDATE_SELECTORS.vacancyOptions);
+      .locator(selectors.vacancyDropdown_parent)
+      .filter({ hasText: selectors.vacancyDropdown_filterText })
+      .locator(selectors.vacancyDropdown_child);
+    this.vacancyOptions = page.locator(selectors.vacancyOptions);
   }
 
   async fillCandidateForm(data: CandidateFormData): Promise<void> {
@@ -73,7 +74,7 @@ export class AddCandidatePage {
   async selectVacancy(vacancyName: string): Promise<void> {
     await this.vacancyDropdown.click();
     await this.page
-      .locator(ADD_CANDIDATE_SELECTORS.vacancyOptions)
+      .locator(selectors.vacancyOptions)
       .filter({ hasText: vacancyName })
       .click();
   }
@@ -89,8 +90,8 @@ export class AddCandidatePage {
 
   get emailError(): Locator {
     return this.page
-      .locator(ADD_CANDIDATE_SELECTORS.emailError.parent)
-      .filter({ hasText: ADD_CANDIDATE_SELECTORS.emailError.filterText })
-      .locator(ADD_CANDIDATE_SELECTORS.emailError.child);
+      .locator(selectors.emailError_parent)
+      .filter({ hasText: selectors.emailError_filterText })
+      .locator(selectors.emailError_child);
   }
 }

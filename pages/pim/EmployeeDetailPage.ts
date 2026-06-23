@@ -1,5 +1,6 @@
 import { Page, Locator } from "@playwright/test";
-import { EMPLOYEE_DETAIL_SELECTORS } from "../../selectors/pim/EmployeeDetailPage.selectors";
+import selectors from "../../selectors/pim.json";
+import { resolve } from "../utils/selectorHelper";
 
 export class EmployeeDetailPage {
   readonly firstNameInput: Locator;
@@ -13,19 +14,19 @@ export class EmployeeDetailPage {
   readonly personalDetailsHeader: Locator;
 
   constructor(private readonly page: Page) {
-    this.firstNameInput = page.getByPlaceholder(EMPLOYEE_DETAIL_SELECTORS.firstNameInput.placeholder);
-    this.middleNameInput = page.getByPlaceholder(EMPLOYEE_DETAIL_SELECTORS.middleNameInput.placeholder);
-    this.lastNameInput = page.getByPlaceholder(EMPLOYEE_DETAIL_SELECTORS.lastNameInput.placeholder);
+    this.firstNameInput = resolve(page, selectors.firstNameInput);
+    this.middleNameInput = resolve(page, selectors.middleNameInput);
+    this.lastNameInput = resolve(page, selectors.lastNameInput);
     this.employeeIdInput = page
-      .locator(EMPLOYEE_DETAIL_SELECTORS.employeeIdInput.parent)
-      .filter({ hasText: EMPLOYEE_DETAIL_SELECTORS.employeeIdInput.filterText })
-      .locator(EMPLOYEE_DETAIL_SELECTORS.employeeIdInput.child);
-    this.saveButtons = page.getByRole(EMPLOYEE_DETAIL_SELECTORS.saveButtons.role, { name: EMPLOYEE_DETAIL_SELECTORS.saveButtons.name });
-    this.successToast = page.locator(EMPLOYEE_DETAIL_SELECTORS.successToast);
-    this.errorToast = page.locator(EMPLOYEE_DETAIL_SELECTORS.errorToast);
-    this.validationErrors = page.locator(EMPLOYEE_DETAIL_SELECTORS.validationErrors);
-    this.personalDetailsHeader = page.locator(EMPLOYEE_DETAIL_SELECTORS.personalDetailsHeader.tag, {
-      hasText: EMPLOYEE_DETAIL_SELECTORS.personalDetailsHeader.hasText,
+      .locator(selectors.employeeIdInput_parent)
+      .filter({ hasText: selectors.employeeIdInput_filterText })
+      .locator(selectors.employeeIdInput_child);
+    this.saveButtons = resolve(page, selectors.saveButton);
+    this.successToast = page.locator(selectors.successToast);
+    this.errorToast = page.locator(selectors.errorToast);
+    this.validationErrors = page.locator(selectors.validationErrors);
+    this.personalDetailsHeader = page.locator(selectors.personalDetailsHeader, {
+      hasText: selectors.personalDetailsHeader_hasText,
     });
   }
 
