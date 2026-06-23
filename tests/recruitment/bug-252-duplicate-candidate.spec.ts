@@ -1,6 +1,6 @@
-import { test, expect } from "../fixtures/auth.fixture";
-import { RecruitmentPage } from "../pages/RecruitmentPage";
-import { AddCandidatePage } from "../pages/AddCandidatePage";
+import { test, expect } from "../../fixtures/auth.fixture";
+import { RecruitmentPage } from "../../pages/recruitment/RecruitmentPage";
+import { AddCandidatePage } from "../../pages/recruitment/AddCandidatePage";
 
 test.describe("Recruitment - Duplicate Candidate Prevention", () => {
   test("should prevent adding a candidate with a duplicate email", async ({ authenticatedPage }) => {

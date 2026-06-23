@@ -1,5 +1,5 @@
-import { test, expect } from "../fixtures/auth.fixture";
-import { TimesheetPendingPage } from "../pages/TimesheetPendingPage";
+import { test, expect } from "../../fixtures/auth.fixture";
+import { TimesheetPendingPage } from "../../pages/leave/TimesheetPendingPage";
 
 test.describe("Timesheet Pending Actions - Duplication Check", () => {
   test("should not display duplicate employee entries in the pending timesheets list", async ({

@@ -1,11 +1,11 @@
 import * as fs from "fs";
 import * as path from "path";
-import { test, expect } from "../fixtures/auth.fixture";
+import { test, expect } from "../../fixtures/auth.fixture";
 import {
   PageTitleCapture,
   MODULES,
   TitleBaseline,
-} from "../pages/PageTitleCapture";
+} from "../../pages/utils/PageTitleCapture";
 
 const BASELINE_PATH = path.resolve(__dirname, "../baselines/page-titles.json");
 

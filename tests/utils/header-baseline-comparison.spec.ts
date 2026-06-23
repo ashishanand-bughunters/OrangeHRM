@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
-import { test, expect } from "../fixtures/auth.fixture";
-import { PageTitleCapture } from "../pages/PageTitleCapture";
+import { test, expect } from "../../fixtures/auth.fixture";
+import { PageTitleCapture } from "../../pages/utils/PageTitleCapture";
 
 const HEADER_PAGES = [
   { key: "admin", path: "/web/index.php/admin/viewSystemUsers" },
