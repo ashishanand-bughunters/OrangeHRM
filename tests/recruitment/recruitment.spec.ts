@@ -1,6 +1,6 @@
-import { test, expect } from "../fixtures/auth.fixture";
-import { RecruitmentPage } from "../pages/RecruitmentPage";
-import { AddCandidatePage } from "../pages/AddCandidatePage";
+import { test, expect } from "../../fixtures/auth.fixture";
+import { RecruitmentPage } from "../../pages/recruitment/RecruitmentPage";
+import { AddCandidatePage } from "../../pages/recruitment/AddCandidatePage";
 
 test.describe("Recruitment - Add Candidate", () => {
   test("should add a new candidate successfully", async ({ authenticatedPage }) => {
@@ -79,7 +79,7 @@ test.describe("Recruitment - Duplicate Candidate Validation", () => {
     await addCandidatePage.fillCandidateForm({ firstName, lastName, email });
 
     // Select the first available vacancy from the dropdown
-    await addCandidatePage.vacancySelect.click();
+    await addCandidatePage.vacancyDropdown.click();
     const firstOption = authenticatedPage
       .locator(".oxd-select-dropdown .oxd-select-option")
       .first();

@@ -1,4 +1,6 @@
 import { Page, Locator } from "@playwright/test";
+import selectors from "../../selectors/pim.json";
+import { resolve } from "../utils/selectorHelper";
 
 export interface EmployeeFormData {
   firstName: string;
@@ -20,19 +22,19 @@ export class AddEmployeePage {
   readonly createLoginToggle: Locator;
 
   constructor(private readonly page: Page) {
-    this.firstNameInput = page.getByPlaceholder("First Name");
-    this.middleNameInput = page.getByPlaceholder("Middle Name");
-    this.lastNameInput = page.getByPlaceholder("Last Name");
+    this.firstNameInput = resolve(page, selectors.firstNameInput);
+    this.middleNameInput = resolve(page, selectors.middleNameInput);
+    this.lastNameInput = resolve(page, selectors.lastNameInput);
     this.employeeIdInput = page
-      .locator(".oxd-form-row")
-      .filter({ hasText: "Employee Id" })
-      .locator("input");
-    this.saveButton = page.getByRole("button", { name: "Save" });
-    this.cancelButton = page.getByRole("button", { name: "Cancel" });
-    this.successToast = page.locator(".oxd-toast--success");
-    this.errorToast = page.locator(".oxd-toast--error");
-    this.validationErrors = page.locator(".oxd-input-field-error-message");
-    this.createLoginToggle = page.locator(".oxd-switch-input");
+      .locator(selectors.employeeIdInput_parent)
+      .filter({ hasText: selectors.employeeIdInput_filterText })
+      .locator(selectors.employeeIdInput_child);
+    this.saveButton = resolve(page, selectors.saveButton);
+    this.cancelButton = resolve(page, selectors.cancelButton);
+    this.successToast = page.locator(selectors.successToast);
+    this.errorToast = page.locator(selectors.errorToast);
+    this.validationErrors = page.locator(selectors.validationErrors);
+    this.createLoginToggle = page.locator(selectors.createLoginToggle);
   }
 
   async fillEmployeeForm(data: EmployeeFormData): Promise<void> {

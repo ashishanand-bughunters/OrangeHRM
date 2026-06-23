@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
-import { test, expect } from "../fixtures/auth.fixture";
-import { PageTitleCapture } from "../pages/PageTitleCapture";
+import { test, expect } from "../../fixtures/auth.fixture";
+import { PageTitleCapture } from "../../pages/utils/PageTitleCapture";
 
 const HEADER_PAGES = [
   { key: "admin", path: "/web/index.php/admin/viewSystemUsers" },
@@ -21,7 +21,7 @@ const HEADER_PAGES = [
 let baseline: Record<string, string>;
 
 test.beforeAll(() => {
-  const baselinePath = path.resolve(__dirname, "../files/headerBaseline.json");
+  const baselinePath = path.resolve(__dirname, "../../files/headerBaseline.json");
   if (!fs.existsSync(baselinePath)) {
     throw new Error(`Baseline file not found: ${baselinePath}`);
   }

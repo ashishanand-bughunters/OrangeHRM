@@ -1,8 +1,8 @@
 import * as fs from "fs";
 import * as path from "path";
-import { test, expect } from "../fixtures/auth.fixture";
+import { test, expect } from "../../fixtures/auth.fixture";
 
-const BASELINE_PATH = path.resolve(__dirname, "../files/headerBaseline.json");
+const BASELINE_PATH = path.resolve(__dirname, "../../files/headerBaseline.json");
 
 const PAGES: Record<string, string> = {
   dashboard: "/web/index.php/dashboard/index",

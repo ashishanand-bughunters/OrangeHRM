@@ -1,7 +1,7 @@
-import { test, expect } from "../fixtures/auth.fixture";
-import { PimPage } from "../pages/PimPage";
-import { AddEmployeePage } from "../pages/AddEmployeePage";
-import { EmployeeDetailPage } from "../pages/EmployeeDetailPage";
+import { test, expect } from "../../fixtures/auth.fixture";
+import { PimPage } from "../../pages/pim/PimPage";
+import { AddEmployeePage } from "../../pages/pim/AddEmployeePage";
+import { EmployeeDetailPage } from "../../pages/pim/EmployeeDetailPage";
 
 const uniqueId = Date.now();
 

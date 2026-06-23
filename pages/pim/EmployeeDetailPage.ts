@@ -1,4 +1,6 @@
 import { Page, Locator } from "@playwright/test";
+import selectors from "../../selectors/pim.json";
+import { resolve } from "../utils/selectorHelper";
 
 export class EmployeeDetailPage {
   readonly firstNameInput: Locator;
@@ -12,19 +14,19 @@ export class EmployeeDetailPage {
   readonly personalDetailsHeader: Locator;
 
   constructor(private readonly page: Page) {
-    this.firstNameInput = page.getByPlaceholder("First Name");
-    this.middleNameInput = page.getByPlaceholder("Middle Name");
-    this.lastNameInput = page.getByPlaceholder("Last Name");
+    this.firstNameInput = resolve(page, selectors.firstNameInput);
+    this.middleNameInput = resolve(page, selectors.middleNameInput);
+    this.lastNameInput = resolve(page, selectors.lastNameInput);
     this.employeeIdInput = page
-      .locator(".oxd-form-row")
-      .filter({ hasText: "Employee Id" })
-      .locator("input");
-    this.saveButtons = page.getByRole("button", { name: "Save" });
-    this.successToast = page.locator(".oxd-toast--success");
-    this.errorToast = page.locator(".oxd-toast--error");
-    this.validationErrors = page.locator(".oxd-input-field-error-message");
-    this.personalDetailsHeader = page.locator("h6", {
-      hasText: "Personal Details",
+      .locator(selectors.employeeIdInput_parent)
+      .filter({ hasText: selectors.employeeIdInput_filterText })
+      .locator(selectors.employeeIdInput_child);
+    this.saveButtons = resolve(page, selectors.saveButton);
+    this.successToast = page.locator(selectors.successToast);
+    this.errorToast = page.locator(selectors.errorToast);
+    this.validationErrors = page.locator(selectors.validationErrors);
+    this.personalDetailsHeader = page.locator(selectors.personalDetailsHeader, {
+      hasText: selectors.personalDetailsHeader_hasText,
     });
   }
 

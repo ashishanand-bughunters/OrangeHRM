@@ -1,4 +1,5 @@
 import { Page } from "@playwright/test";
+import selectors from "../../selectors/leave.json";
 
 export class TimesheetPendingPage {
   constructor(private readonly page: Page) {}
@@ -8,14 +9,11 @@ export class TimesheetPendingPage {
       waitUntil: "domcontentloaded",
     });
 
-    // Wait for the table body to be present before interacting
-    await this.page.locator(".oxd-table-body").waitFor({ state: "visible" });
+    await this.page.locator(selectors.tableBody).waitFor({ state: "visible" });
   }
 
   async getEmployeeNames(): Promise<string[]> {
-    const rows = this.page.locator(
-      '//div[@class="oxd-table-body"]/div[contains(@class,"oxd-table-row")]/div[2]'
-    );
+    const rows = this.page.locator(selectors.employeeNameRows);
 
     await rows.first().waitFor({ state: "visible" });
 
