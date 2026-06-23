@@ -1,4 +1,5 @@
 import { Page, Locator } from "@playwright/test";
+import { EMPLOYEE_DETAIL_SELECTORS } from "../../selectors/pim/EmployeeDetailPage.selectors";
 
 export class EmployeeDetailPage {
   readonly firstNameInput: Locator;
@@ -12,19 +13,19 @@ export class EmployeeDetailPage {
   readonly personalDetailsHeader: Locator;
 
   constructor(private readonly page: Page) {
-    this.firstNameInput = page.getByPlaceholder("First Name");
-    this.middleNameInput = page.getByPlaceholder("Middle Name");
-    this.lastNameInput = page.getByPlaceholder("Last Name");
+    this.firstNameInput = page.getByPlaceholder(EMPLOYEE_DETAIL_SELECTORS.firstNameInput.placeholder);
+    this.middleNameInput = page.getByPlaceholder(EMPLOYEE_DETAIL_SELECTORS.middleNameInput.placeholder);
+    this.lastNameInput = page.getByPlaceholder(EMPLOYEE_DETAIL_SELECTORS.lastNameInput.placeholder);
     this.employeeIdInput = page
-      .locator(".oxd-form-row")
-      .filter({ hasText: "Employee Id" })
-      .locator("input");
-    this.saveButtons = page.getByRole("button", { name: "Save" });
-    this.successToast = page.locator(".oxd-toast--success");
-    this.errorToast = page.locator(".oxd-toast--error");
-    this.validationErrors = page.locator(".oxd-input-field-error-message");
-    this.personalDetailsHeader = page.locator("h6", {
-      hasText: "Personal Details",
+      .locator(EMPLOYEE_DETAIL_SELECTORS.employeeIdInput.parent)
+      .filter({ hasText: EMPLOYEE_DETAIL_SELECTORS.employeeIdInput.filterText })
+      .locator(EMPLOYEE_DETAIL_SELECTORS.employeeIdInput.child);
+    this.saveButtons = page.getByRole(EMPLOYEE_DETAIL_SELECTORS.saveButtons.role, { name: EMPLOYEE_DETAIL_SELECTORS.saveButtons.name });
+    this.successToast = page.locator(EMPLOYEE_DETAIL_SELECTORS.successToast);
+    this.errorToast = page.locator(EMPLOYEE_DETAIL_SELECTORS.errorToast);
+    this.validationErrors = page.locator(EMPLOYEE_DETAIL_SELECTORS.validationErrors);
+    this.personalDetailsHeader = page.locator(EMPLOYEE_DETAIL_SELECTORS.personalDetailsHeader.tag, {
+      hasText: EMPLOYEE_DETAIL_SELECTORS.personalDetailsHeader.hasText,
     });
   }
 

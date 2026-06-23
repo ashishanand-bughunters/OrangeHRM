@@ -1,4 +1,5 @@
 import { Page, Locator } from "@playwright/test";
+import { ADD_CANDIDATE_SELECTORS } from "../../selectors/recruitment/AddCandidatePage.selectors";
 
 export interface CandidateFormData {
   firstName: string;
@@ -25,19 +26,29 @@ export class AddCandidatePage {
   readonly vacancyOptions: Locator;
 
   constructor(private readonly page: Page) {
-    this.firstNameInput = page.getByPlaceholder("First Name");
-    this.middleNameInput = page.getByPlaceholder("Middle Name");
-    this.lastNameInput = page.getByPlaceholder("Last Name");
-    this.emailInput = page.locator(".oxd-form-row").filter({ hasText: "Email" }).locator("input").first();
-    this.contactNumberInput = page.locator(".oxd-form-row").filter({ hasText: "Contact Number" }).locator("input");
-    this.notesInput = page.locator("textarea.oxd-textarea");
-    this.saveButton = page.getByRole("button", { name: "Save" });
-    this.cancelButton = page.getByRole("button", { name: "Cancel" });
-    this.successToast = page.locator(".oxd-toast--success");
-    this.errorToast = page.locator(".oxd-toast--error");
-    this.validationErrors = page.locator(".oxd-input-field-error-message");
-    this.vacancyDropdown = page.locator(".oxd-form-row").filter({ hasText: "Vacancy" }).locator(".oxd-select-wrapper");
-    this.vacancyOptions = page.locator(".oxd-select-dropdown .oxd-select-option");
+    this.firstNameInput = page.getByPlaceholder(ADD_CANDIDATE_SELECTORS.firstNameInput.placeholder);
+    this.middleNameInput = page.getByPlaceholder(ADD_CANDIDATE_SELECTORS.middleNameInput.placeholder);
+    this.lastNameInput = page.getByPlaceholder(ADD_CANDIDATE_SELECTORS.lastNameInput.placeholder);
+    this.emailInput = page
+      .locator(ADD_CANDIDATE_SELECTORS.emailInput.parent)
+      .filter({ hasText: ADD_CANDIDATE_SELECTORS.emailInput.filterText })
+      .locator(ADD_CANDIDATE_SELECTORS.emailInput.child)
+      .first();
+    this.contactNumberInput = page
+      .locator(ADD_CANDIDATE_SELECTORS.contactNumberInput.parent)
+      .filter({ hasText: ADD_CANDIDATE_SELECTORS.contactNumberInput.filterText })
+      .locator(ADD_CANDIDATE_SELECTORS.contactNumberInput.child);
+    this.notesInput = page.locator(ADD_CANDIDATE_SELECTORS.notesInput);
+    this.saveButton = page.getByRole(ADD_CANDIDATE_SELECTORS.saveButton.role, { name: ADD_CANDIDATE_SELECTORS.saveButton.name });
+    this.cancelButton = page.getByRole(ADD_CANDIDATE_SELECTORS.cancelButton.role, { name: ADD_CANDIDATE_SELECTORS.cancelButton.name });
+    this.successToast = page.locator(ADD_CANDIDATE_SELECTORS.successToast);
+    this.errorToast = page.locator(ADD_CANDIDATE_SELECTORS.errorToast);
+    this.validationErrors = page.locator(ADD_CANDIDATE_SELECTORS.validationErrors);
+    this.vacancyDropdown = page
+      .locator(ADD_CANDIDATE_SELECTORS.vacancyDropdown.parent)
+      .filter({ hasText: ADD_CANDIDATE_SELECTORS.vacancyDropdown.filterText })
+      .locator(ADD_CANDIDATE_SELECTORS.vacancyDropdown.child);
+    this.vacancyOptions = page.locator(ADD_CANDIDATE_SELECTORS.vacancyOptions);
   }
 
   async fillCandidateForm(data: CandidateFormData): Promise<void> {
@@ -60,9 +71,9 @@ export class AddCandidatePage {
   }
 
   async selectVacancy(vacancyName: string): Promise<void> {
-    await this.vacancySelect.click();
+    await this.vacancyDropdown.click();
     await this.page
-      .locator(".oxd-select-dropdown .oxd-select-option")
+      .locator(ADD_CANDIDATE_SELECTORS.vacancyOptions)
       .filter({ hasText: vacancyName })
       .click();
   }
@@ -77,6 +88,9 @@ export class AddCandidatePage {
   }
 
   get emailError(): Locator {
-    return this.page.locator(".oxd-form-row").filter({ hasText: "Email" }).locator(".oxd-input-field-error-message");
+    return this.page
+      .locator(ADD_CANDIDATE_SELECTORS.emailError.parent)
+      .filter({ hasText: ADD_CANDIDATE_SELECTORS.emailError.filterText })
+      .locator(ADD_CANDIDATE_SELECTORS.emailError.child);
   }
 }

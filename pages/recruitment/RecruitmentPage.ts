@@ -1,4 +1,5 @@
 import { Page, Locator } from "@playwright/test";
+import { RECRUITMENT_SELECTORS } from "../../selectors/recruitment/RecruitmentPage.selectors";
 
 export class RecruitmentPage {
   private readonly recruitmentLink: Locator;
@@ -6,9 +7,9 @@ export class RecruitmentPage {
   private readonly candidateTableRows: Locator;
 
   constructor(private readonly page: Page) {
-    this.recruitmentLink = page.getByRole("link", { name: "Recruitment" });
-    this.addButton = page.getByRole("button", { name: "Add" });
-    this.candidateTableRows = page.locator(".oxd-table-body .oxd-table-row");
+    this.recruitmentLink = page.getByRole(RECRUITMENT_SELECTORS.recruitmentLink.role, { name: RECRUITMENT_SELECTORS.recruitmentLink.name });
+    this.addButton = page.getByRole(RECRUITMENT_SELECTORS.addButton.role, { name: RECRUITMENT_SELECTORS.addButton.name });
+    this.candidateTableRows = page.locator(RECRUITMENT_SELECTORS.candidateTableRows);
   }
 
   async navigate(): Promise<void> {

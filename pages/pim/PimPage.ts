@@ -1,4 +1,5 @@
 import { Page, Locator } from "@playwright/test";
+import { PIM_SELECTORS } from "../../selectors/pim/PimPage.selectors";
 
 export class PimPage {
   readonly pimLink: Locator;
@@ -14,27 +15,25 @@ export class PimPage {
   readonly tableHeaders: Locator;
 
   constructor(private readonly page: Page) {
-    this.pimLink = page.getByRole("link", { name: "PIM" });
-    this.addButton = page.getByRole("button", { name: "Add" });
-    this.employeeTableRows = page.locator(".oxd-table-body .oxd-table-row");
+    this.pimLink = page.getByRole(PIM_SELECTORS.pimLink.role, { name: PIM_SELECTORS.pimLink.name });
+    this.addButton = page.getByRole(PIM_SELECTORS.addButton.role, { name: PIM_SELECTORS.addButton.name });
+    this.employeeTableRows = page.locator(PIM_SELECTORS.employeeTableRows);
     this.searchInputEmployeeName = page
-      .locator(".oxd-form-row")
-      .filter({ hasText: "Employee Name" })
-      .locator("input")
+      .locator(PIM_SELECTORS.searchInputEmployeeName.parent)
+      .filter({ hasText: PIM_SELECTORS.searchInputEmployeeName.filterText })
+      .locator(PIM_SELECTORS.searchInputEmployeeName.child)
       .first();
-    this.searchButton = page.getByRole("button", { name: "Search" });
-    this.resetButton = page.getByRole("button", { name: "Reset" });
-    this.recordsFoundText = page.locator(".orangehrm-horizontal-padding span");
-    this.noRecordsMessage = page.locator(".orangehrm-horizontal-padding span", {
-      hasText: "No Records Found",
+    this.searchButton = page.getByRole(PIM_SELECTORS.searchButton.role, { name: PIM_SELECTORS.searchButton.name });
+    this.resetButton = page.getByRole(PIM_SELECTORS.resetButton.role, { name: PIM_SELECTORS.resetButton.name });
+    this.recordsFoundText = page.locator(PIM_SELECTORS.recordsFoundText);
+    this.noRecordsMessage = page.locator(PIM_SELECTORS.noRecordsMessage.locator, {
+      hasText: PIM_SELECTORS.noRecordsMessage.hasText,
     });
-    this.successToast = page.locator(".oxd-toast--success");
-    this.deleteConfirmButton = page.getByRole("button", {
-      name: "Yes, Delete",
+    this.successToast = page.locator(PIM_SELECTORS.successToast);
+    this.deleteConfirmButton = page.getByRole(PIM_SELECTORS.deleteConfirmButton.role, {
+      name: PIM_SELECTORS.deleteConfirmButton.name,
     });
-    this.tableHeaders = page.locator(
-      ".oxd-table-header .oxd-table-row .oxd-table-cell"
-    );
+    this.tableHeaders = page.locator(PIM_SELECTORS.tableHeaders);
   }
 
   async navigate(): Promise<void> {
@@ -52,18 +51,17 @@ export class PimPage {
   }
 
   async getEditButtonForRow(row: Locator): Promise<Locator> {
-    return row.locator("i.bi-pencil-fill").first();
+    return row.locator(PIM_SELECTORS.editIcon).first();
   }
 
   async getDeleteButtonForRow(row: Locator): Promise<Locator> {
-    return row.locator("i.bi-trash").first();
+    return row.locator(PIM_SELECTORS.deleteIcon).first();
   }
 
   async searchByEmployeeName(name: string): Promise<void> {
     await this.searchInputEmployeeName.fill(name);
-    // Wait for autocomplete dropdown and select the first matching option
     const autocompleteOption = this.page
-      .locator(".oxd-autocomplete-dropdown .oxd-autocomplete-option")
+      .locator(PIM_SELECTORS.autocompleteOption)
       .first();
     await autocompleteOption.waitFor({ state: "visible", timeout: 10_000 });
     await autocompleteOption.click();

@@ -1,4 +1,5 @@
 import { Page, Locator } from "@playwright/test";
+import { ADD_EMPLOYEE_SELECTORS } from "../../selectors/pim/AddEmployeePage.selectors";
 
 export interface EmployeeFormData {
   firstName: string;
@@ -20,19 +21,19 @@ export class AddEmployeePage {
   readonly createLoginToggle: Locator;
 
   constructor(private readonly page: Page) {
-    this.firstNameInput = page.getByPlaceholder("First Name");
-    this.middleNameInput = page.getByPlaceholder("Middle Name");
-    this.lastNameInput = page.getByPlaceholder("Last Name");
+    this.firstNameInput = page.getByPlaceholder(ADD_EMPLOYEE_SELECTORS.firstNameInput.placeholder);
+    this.middleNameInput = page.getByPlaceholder(ADD_EMPLOYEE_SELECTORS.middleNameInput.placeholder);
+    this.lastNameInput = page.getByPlaceholder(ADD_EMPLOYEE_SELECTORS.lastNameInput.placeholder);
     this.employeeIdInput = page
-      .locator(".oxd-form-row")
-      .filter({ hasText: "Employee Id" })
-      .locator("input");
-    this.saveButton = page.getByRole("button", { name: "Save" });
-    this.cancelButton = page.getByRole("button", { name: "Cancel" });
-    this.successToast = page.locator(".oxd-toast--success");
-    this.errorToast = page.locator(".oxd-toast--error");
-    this.validationErrors = page.locator(".oxd-input-field-error-message");
-    this.createLoginToggle = page.locator(".oxd-switch-input");
+      .locator(ADD_EMPLOYEE_SELECTORS.employeeIdInput.parent)
+      .filter({ hasText: ADD_EMPLOYEE_SELECTORS.employeeIdInput.filterText })
+      .locator(ADD_EMPLOYEE_SELECTORS.employeeIdInput.child);
+    this.saveButton = page.getByRole(ADD_EMPLOYEE_SELECTORS.saveButton.role, { name: ADD_EMPLOYEE_SELECTORS.saveButton.name });
+    this.cancelButton = page.getByRole(ADD_EMPLOYEE_SELECTORS.cancelButton.role, { name: ADD_EMPLOYEE_SELECTORS.cancelButton.name });
+    this.successToast = page.locator(ADD_EMPLOYEE_SELECTORS.successToast);
+    this.errorToast = page.locator(ADD_EMPLOYEE_SELECTORS.errorToast);
+    this.validationErrors = page.locator(ADD_EMPLOYEE_SELECTORS.validationErrors);
+    this.createLoginToggle = page.locator(ADD_EMPLOYEE_SELECTORS.createLoginToggle);
   }
 
   async fillEmployeeForm(data: EmployeeFormData): Promise<void> {
