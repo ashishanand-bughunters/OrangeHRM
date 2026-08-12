@@ -65,6 +65,10 @@ export class ApplyLeavePage {
     return this.validationErrors.allInnerTexts();
   }
 
+  get validationErrorLocator(): Locator {
+    return this.validationErrors;
+  }
+
   async hasValidationError(): Promise<boolean> {
     return (await this.validationErrors.count()) > 0;
   }
