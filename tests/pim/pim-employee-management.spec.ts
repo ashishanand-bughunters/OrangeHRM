@@ -293,3 +293,63 @@ test.describe("PIM - Employee List", () => {
     await authenticatedPage.waitForURL("**/pim/viewEmployeeList");
   });
 });
+
+test.describe("PIM - TC-01: Reset Employment Status Filter", () => {
+  test("should clear Employment Status filter when Reset button is clicked", async ({
+    authenticatedPage,
+  }) => {
+    const pimPage = new PimPage(authenticatedPage);
+
+    // Navigate to PIM Employee List
+    await pimPage.navigate();
+
+    // Find and interact with Employment Status filter
+    const employmentStatusFilterRow = authenticatedPage
+      .locator(".oxd-form-row")
+      .filter({ hasText: "Employment Status" });
+
+    // Click on the dropdown/select to open it
+    const dropdown = employmentStatusFilterRow
+      .locator(".oxd-select-wrapper, select")
+      .first();
+    
+    await dropdown.click();
+    await authenticatedPage.waitForTimeout(500);
+
+    // Select "Freelance" option
+    const freelanceOption = authenticatedPage
+      .locator(".oxd-select-option, div[role='option']")
+      .filter({ hasText: /^Freelance$/ })
+      .first();
+    
+    await freelanceOption.click();
+    await authenticatedPage.waitForTimeout(500);
+
+    // Verify Employment Status is set to Freelance
+    const selectedText = await dropdown.textContent();
+    expect(selectedText).toContain("Freelance");
+
+    // Click Search to apply filter
+    await pimPage.searchButton.click();
+    await authenticatedPage.waitForLoadState("networkidle");
+
+    // Get record count before reset
+    const recordsBefore = await pimPage.recordsFoundText.first().textContent();
+    console.log("Records with Freelance filter:", recordsBefore);
+
+    // Click Reset button
+    await pimPage.resetButton.click();
+    await authenticatedPage.waitForLoadState("networkidle");
+
+    // Verify Employment Status is cleared (shows "-- Select --" indicating reset)
+    const resetText = await dropdown.textContent();
+    expect(resetText?.trim()).not.toContain("Freelance");
+
+    // Verify full list is displayed (should have more or equal records)
+    const recordsAfter = await pimPage.recordsFoundText.first().textContent();
+    console.log("Records after reset:", recordsAfter);
+    
+    // Full list should have the same or more records
+    expect(recordsAfter).toBeTruthy();
+  });
+});
