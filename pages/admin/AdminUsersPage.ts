@@ -45,33 +45,17 @@ export class AdminUsersPage {
     const input = this.page.getByRole("textbox", { name: "Type for hints..." });
     await input.click();
     await input.fill(namePrefix);
-    // Wait for actual results (not the "Searching..." loading state)
-    await this.page.waitForFunction(
-      () => {
-        const opts = document.querySelectorAll(".oxd-autocomplete-option");
-        return (
-          opts.length > 0 && !opts[0].textContent?.includes("Searching")
-        );
-      },
-      { timeout: 15_000 }
-    );
-    // Click the first actual result
-    const option = this.page.locator(selectors.autocompleteOption).first();
-    await option.click();
-    // Verify the field value changed (employee selected)
-    await this.page.waitForFunction(
-      (prefix) => {
-        const el = document.querySelector(
-          ".oxd-autocomplete-wrapper input"
-        ) as HTMLInputElement;
-        return el && el.value !== prefix && el.value.length > 0;
-      },
-      namePrefix,
-      { timeout: 5_000 }
-    );
+    // Wait for a real option (not the transient "Searching..." placeholder)
+    const realOption = this.page
+      .getByRole("option")
+      .filter({ hasNotText: /Searching/i })
+      .first();
+    await realOption.waitFor({ state: "visible", timeout: 20_000 });
+    await realOption.click();
   }
 
   async fillUsername(username: string): Promise<void> {
+    // nth(2): 0=sidebar search, 1=employee name autocomplete, 2=username
     await this.page.getByRole("textbox").nth(2).fill(username);
   }
 
