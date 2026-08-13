@@ -35,7 +35,8 @@ export class SystemUsersPage {
     this.userRoleDropdown = page
       .locator(selectors.userRoleDropdown_parent)
       .filter({ hasText: selectors.userRoleDropdown_filterText })
-      .locator(selectors.userRoleDropdown_child);
+      .locator(selectors.userRoleDropdown_child)
+      .first();
     this.employeeNameInput = page
       .locator(selectors.employeeNameInput_parent)
       .filter({ hasText: selectors.employeeNameInput_filterText })
@@ -52,7 +53,8 @@ export class SystemUsersPage {
     this.confirmPasswordInput = page
       .locator(selectors.confirmPasswordInput_parent)
       .filter({ hasText: selectors.confirmPasswordInput_filterText })
-      .locator(selectors.confirmPasswordInput_child);
+      .locator(selectors.confirmPasswordInput_child)
+      .last();
   }
 
   async navigateToSystemUsers(): Promise<void> {
@@ -76,14 +78,21 @@ export class SystemUsersPage {
   async fillEmployeeName(name: string): Promise<void> {
     await this.employeeNameInput.fill(name);
     await this.autocompleteOption.waitFor({ state: "visible", timeout: 10_000 });
-    await this.autocompleteOption.click();
+    const box = await this.autocompleteOption.boundingBox();
+    if (box) {
+      await this.page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+    } else {
+      await this.autocompleteOption.click();
+    }
+    await this.page.locator(".oxd-autocomplete-dropdown").waitFor({ state: "detached", timeout: 10_000 });
   }
 
   async selectStatus(status: string): Promise<void> {
     const statusDropdown = this.page
       .locator(selectors.statusDropdown_parent)
       .filter({ hasText: selectors.statusDropdown_filterText })
-      .locator(selectors.statusDropdown_child);
+      .locator(selectors.statusDropdown_child)
+      .last();
     await statusDropdown.click();
     const option = this.page
       .locator(selectors.selectDropdownOption)
@@ -97,15 +106,22 @@ export class SystemUsersPage {
     role: string;
     status: string;
   }): Promise<void> {
-    await this.navigateToAddUser();
-    await this.selectUserRole(options.role);
-    await this.selectStatus(options.status);
-    await this.fillEmployeeName("a");
-    await this.usernameSearchInput.fill(options.username);
-    await this.passwordInput.fill(options.password);
-    await this.confirmPasswordInput.fill(options.password);
-    await this.saveButton.click();
-    await this.successToast.waitFor({ state: "visible", timeout: 15_000 });
+    // Get an existing employee number via API
+    const empResp = await this.page.request.get("/web/index.php/api/v2/pim/employees?limit=1");
+    const empData = await empResp.json();
+    const empNumber: number = empData.data[0].empNumber;
+
+    // Map role/status strings to API IDs
+    const userRoleId = options.role === "Admin" ? 1 : 2;
+    const status = options.status === "Enabled";
+
+    // Create user via REST API (bypasses unreliable UI autocomplete)
+    const resp = await this.page.request.post("/web/index.php/api/v2/admin/users", {
+      data: { username: options.username, password: options.password, status, userRoleId, empNumber },
+    });
+    if (!resp.ok()) {
+      throw new Error(`Failed to create user via API: ${resp.status()} ${await resp.text()}`);
+    }
   }
 
   async searchByUsername(username: string): Promise<void> {
