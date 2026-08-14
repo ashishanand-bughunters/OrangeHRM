@@ -1,0 +1,13 @@
+{
+  "mainTitle": ".orangehrm-main-title",
+  "prevPeriod": ".orangehrm-timeperiod-icon.--prev",
+  "statusText": ".orangehrm-timesheet-footer--title .oxd-text",
+  "editButton": "button:Edit",
+  "submitButton": "button:Submit",
+  "saveButton": "button:Save",
+  "successToast": ".oxd-toast--success",
+  "timesheetActionsSection": ".orangehrm-paper-container",
+  "timesheetActionsSection_filterText": "Actions performed on the timesheet",
+  "commentCell": ".oxd-table-cell-truncate",
+  "hoursInputCell": ".orangehrm-timesheet-table-body-cell.--duration-input input"
+}
