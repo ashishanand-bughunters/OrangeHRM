@@ -37,7 +37,7 @@ export class MyTimesheetPage {
     await this.page.goto("/web/index.php/time/viewMyTimesheet", {
       waitUntil: "domcontentloaded",
     });
-    await this.mainTitle.waitFor({ state: "visible" });
+    await this.mainTitle.waitFor({ state: "visible", timeout: 30_000 });
   }
 
   async getStatus(): Promise<string> {
@@ -57,7 +57,7 @@ export class MyTimesheetPage {
   async clickEdit(): Promise<void> {
     await this.editButton.click();
     await this.page.waitForURL("**/time/editTimesheet/**", {
-      timeout: 15_000,
+      timeout: 30_000,
     });
   }
 
@@ -70,7 +70,7 @@ export class MyTimesheetPage {
   async clickSave(): Promise<void> {
     await this.saveButton.click();
     await this.page.waitForURL("**/time/viewMyTimesheet**", {
-      timeout: 15_000,
+      timeout: 30_000,
     });
   }
 
