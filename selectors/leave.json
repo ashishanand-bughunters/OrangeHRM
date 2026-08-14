@@ -1,4 +1,22 @@
 {
   "tableBody": ".oxd-table-body",
-  "employeeNameRows": "//div[@class=\"oxd-table-body\"]/div[contains(@class,\"oxd-table-row\")]/div[2]"
+  "employeeNameRows": "//div[@class=\"oxd-table-body\"]/div[contains(@class,\"oxd-table-row\")]/div[2]",
+  "applyLeaveForm": ".oxd-form",
+  "applyLeaveDropdownOption": ".oxd-select-dropdown .oxd-select-option",
+  "applyLeaveValidationError": ".oxd-input-field-error-message",
+  "applyLeaveSubmitButton": "button[type='submit']",
+
+  "myTimesheetContainer": ".orangehrm-background-container",
+  "timesheetDataRow": "tr.orangehrm-timesheet-table-body-row",
+  "timesheetAddRowCell": "td.orangehrm-timesheet-table-body-cell.--flex",
+  "timesheetProjectInput": ".oxd-autocomplete-wrapper input",
+  "timesheetAutocompleteOption": ".oxd-autocomplete-dropdown .oxd-autocomplete-option",
+  "timesheetActivityWrapper": ".oxd-select-wrapper",
+  "timesheetActivityOption": ".oxd-select-dropdown .oxd-select-option",
+  "timesheetHourInput": "td.--duration-input input",
+  "timesheetSubmitButton": "button:Submit",
+  "timesheetCreateButton": "button:Create Timesheet",
+  "timesheetEditButton": "button:Edit",
+  "timesheetStatusFooter": ".orangehrm-timesheet-footer--title",
+  "timesheetSuccessToast": ".oxd-toast--success"
 }
