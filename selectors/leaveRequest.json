@@ -1,0 +1,10 @@
+{
+  "leaveTypeDropdown": ".oxd-select-wrapper",
+  "fromDateInput": "input[placeholder='yyyy-dd-mm']:first-of-type",
+  "toDateInput": "input[placeholder='yyyy-dd-mm']",
+  "applyButton": "button:Apply",
+  "validationError": ".oxd-input-field-error-message",
+  "successMessage": ".oxd-toast--success",
+  "durationLabel": ".oxd-label",
+  "formContainer": ".oxd-form"
+}
