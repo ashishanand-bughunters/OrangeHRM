@@ -1,0 +1,9 @@
+{
+  "adminLink": "link:Admin",
+  "addButton": "button:Add",
+  "saveButton": "button:Save",
+  "successToast": ".oxd-toast--success",
+  "userTableRows": ".oxd-table-body .oxd-table-row",
+  "autocompleteOption": ".oxd-autocomplete-dropdown .oxd-autocomplete-option",
+  "selectDropdownOption": ".oxd-select-dropdown .oxd-select-option"
+}
